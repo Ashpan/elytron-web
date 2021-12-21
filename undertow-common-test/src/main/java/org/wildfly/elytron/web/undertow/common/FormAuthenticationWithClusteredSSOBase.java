@@ -42,6 +42,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.LaxRedirectStrategy;
 import org.apache.http.message.BasicNameValuePair;
 import org.infinispan.Cache;
+//import org.infinispan.commons.marshall.JavaSerializationMarshaller;
 import org.infinispan.configuration.cache.CacheMode;
 import org.infinispan.configuration.cache.ConfigurationBuilder;
 import org.infinispan.configuration.global.GlobalConfigurationBuilder;
@@ -263,12 +264,13 @@ public abstract class FormAuthenticationWithClusteredSSOBase extends AbstractHtt
         String cacheManagerName = UUID.randomUUID().toString();
         EmbeddedCacheManager cacheManager = new DefaultCacheManager(
                 GlobalConfigurationBuilder.defaultClusteredBuilder()
-                        .globalJmxStatistics().cacheManagerName(cacheManagerName)
+                        .globalJmxStatistics().cacheManagerName(cacheManagerName).defaultCacheName("test")
                         .transport().nodeName(cacheManagerName).addProperty(JGroupsTransport.CONFIGURATION_FILE, "fast.xml")
                         .build(),
                 new ConfigurationBuilder()
                         .clustering()
                         .cacheMode(CacheMode.REPL_SYNC)
+//                        .marshaller(new JavaSerializationMarshaller())
                         .build()
         );
 
